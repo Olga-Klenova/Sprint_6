@@ -1,18 +1,16 @@
-import allure
 import pytest
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.firefox.service import Service
 
-from helps.data import Urls
+from curl import *
 
-
-@allure.step('Открытие браузера / переход на страницу сервиса / закрытие браузера')
-@pytest.fixture
+@pytest.fixture(scope="function")
 def driver():
-    driver = webdriver.Firefox()
-    driver.get(Urls.QA_SCOOTER_URL)
+    options = FirefoxOptions()
+
+    options.add_argument("--windows-size=1200,600")
+    driver = webdriver.Firefox(options=options)
+    driver.get(main_site)
     yield driver
     driver.quit()
-
-
-def pytest_make_parametrize_id(val):
-    return repr(val)
